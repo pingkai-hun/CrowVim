@@ -1,0 +1,304 @@
+{
+  // ==========================================================================
+  // coc.nvim 配置  —  补全 / 诊断 / 语义高亮 / 片段
+  // 修改后无需重启：保存即生效（个别选项需要 :CocRestart）
+  // 键名核对自 coc.nvim 0.0.82 的 doc/coc-config.txt 与各扩展的 package.json
+  // ==========================================================================
+
+  // ---------- 补全行为 ----------
+  // minTriggerInputLength=1：输入 1 个字母就开始补全（默认 2 太迟钝）
+  "suggest.minTriggerInputLength": 1,
+  "suggest.timeout": 8000,
+  "suggest.autoTrigger": "always",
+  "suggest.enablePreselect": false,          // 不用自动选中，交给 <Tab>/<CR>
+  "suggest.noselect": true,
+  "suggest.insertMode": "replace",
+  "suggest.selection": "always",             // 唯一候选也高亮，绝不阻塞输入
+  "suggest.localityBonus": true,             // 同作用域 / 同文件的候选优先
+  "suggest.highPrioritySourceLimit": 8,
+  "suggest.detailField": "menu",
+  "suggest.detailMaxLength": 60,
+  "suggest.labelMaxLength": 40,
+  "suggest.maxCompleteItemCount": 200,
+  "suggest.removeDuplicateItems": true,
+  "suggest.removeCurrentWord": true,
+  "suggest.triggerAfterInsertEnter": true,   // 进插入模式立刻给候选
+  "suggest.enableFloat": true,               // 候选旁边的最小文档预览
+  "suggest.floatConfig": { "border": true, "rounded": true, "maxWidth": 100 },
+  "suggest.snippetIndicator": " ~",
+  "suggest.snippetsSupport": true,
+  "suggest.filterGraceful": true,
+  "suggest.asciiMatch": true,
+  // 补全菜单里的中文标签（Maple Mono NF / JetBrains Mono NF 都能显示）
+  "suggest.completionItemKindLabels": {
+    "keyword": " 关键字",
+    "text": " 文本",
+    "method": " 方法",
+    "function": " 函数",
+    "constructor": " 构造",
+    "field": " 字段",
+    "variable": " 变量",
+    "class": " 类",
+    "struct": " 结构",
+    "interface": " 接口",
+    "module": " 模块",
+    "property": " 属性",
+    "event": " 事件",
+    "operator": " 操作",
+    "unit": " 单位",
+    "value": " 值",
+    "constant": " 常量",
+    "enum": " 枚举",
+    "enumMember": " 枚举值",
+    "folder": " 目录",
+    "file": " 文件",
+    "reference": " 引用",
+    "snippet": " 片段",
+    "color": " 颜色",
+    "moduleCompletion": " 导入"
+  },
+
+  // ---------- 补全来源优先级 ----------
+  // LSP（语言服务器）永远排最前；buffer（别的文件里的词）压到最后，
+  // 避免满屏拼写相近的变量名把真正的 API 候选挤下去。
+  "coc.source.file.priority": 100,
+  "coc.source.around.priority": 5,
+  "coc.source.buffer.priority": 1,
+  "coc.source.buffer.ignoreGitignore": true,
+
+  "coc.preferences.enableMarkdown": true,
+  "coc.preferences.currentFunctionSymbolAutoUpdate": true,
+  "coc.preferences.renameFillCurrent": true,
+  "coc.preferences.maxFileSize": "1MB",
+
+  // ---------- snippet (coc-snippets + honza/vim-snippets) ----------
+  // coc-snippets 的 loadFromExtensions / autoTrigger 默认就是 true，
+  // 这里显式写出，并用 textmateSnippetsRoots 指向本地片段库。
+  "snippets.ultisnips.enable": true,
+  "snippets.snipmate.enable": false,          // 与 ultisnips 重复，关掉减少噪声
+  "snippets.textmateSnippetsRoots": ["~/.vim/plugged/vim-snippets/snippets"],
+  "snippets.loadFromExtensions": true,
+  "snippets.loadVSCodeProjectSnippets": true,
+  "snippets.autoTrigger": true,
+  "snippets.priority": 90,
+  "snippets.shortcut": "S",
+  "snippet.highlight": true,                  // 高亮同索引占位符
+  "snippet.nextPlaceholderOnDelete": true,
+  "snippet.statusText": "SNIP",
+
+  // ---------- 诊断：符号列 + 下划线 + 当前行虚拟文本 ----------
+  "diagnostic.enable": true,
+  "diagnostic.enableSign": true,
+  "diagnostic.errorSign": "●",
+  "diagnostic.warningSign": "▲",
+  "diagnostic.infoSign": "●",
+  "diagnostic.hintSign": "○",
+  "diagnostic.enableHighlightLineNumber": true,
+  "diagnostic.virtualText": true,
+  "diagnostic.virtualTextCurrentLineOnly": true,
+  "diagnostic.virtualTextPrefix": "   ",
+  "diagnostic.virtualTextLevel": "warning",
+  "diagnostic.virtualTextLimitInOneLine": 1,
+  "diagnostic.messageTarget": "float",
+  "diagnostic.refreshOnInsertMode": false,
+  "diagnostic.level": "information",
+  "diagnostic.floatConfig": { "border": true, "rounded": true },
+
+  // ---------- 签名提示 ----------
+  "signature.enable": true,
+  "signature.target": "float",
+  "signature.preferShownAbove": true,
+  "signature.hideOnTextChange": false,
+  "signature.triggerSignatureWait": 200,
+  "signature.floatConfig": { "border": true, "rounded": true, "maxWidth": 100 },
+
+  // ---------- 悬浮文档 ----------
+  "hover.target": "float",
+  "hover.autoHide": true,
+  "hover.floatConfig": { "border": true, "rounded": true, "maxWidth": 100 },
+
+  // ---------- inlay hints（参数名 / 类型内联提示） ----------
+  "inlayHint.enable": true,
+  "inlayHint.enableParameter": true,
+  "inlayHint.position": "inline",
+  "inlayHint.maximumLength": 80,
+  "inlayHint.refreshOnInsertMode": false,
+
+  // ---------- 语义高亮（LSP 语义 token，比纯语法更准） ----------
+  "semanticTokens.enable": true,
+
+  // ---------- 工作区 ----------
+  "workspace.rootPatterns": [".git", "go.mod", "Cargo.toml", "pyproject.toml",
+                             "package.json", "compile_commands.json", ".hg"],
+  "workspace.ignoredFiletypes": ["markdown", "help", "txt", "gitcommit", "qf",
+                                 "nerdtree", "vim.ollama"],
+
+  // ---------- 保存时格式化由 .vimrc 的 autocmd 触发，不要重复开启 ----------
+  "coc.preferences.formatOnSave": false,
+  "coc.preferences.formatOnType": false,
+  "coc.preferences.autoApplySingleQuickfix": false,
+
+  // ==========================================================================
+  // 各语言服务器
+  // ==========================================================================
+
+  // Rust — 用系统的 rust-analyzer，不联网检查更新
+  "rust-analyzer.server.path": "/usr/bin/rust-analyzer",
+  "rust-analyzer.updates.checkOnStartup": false,
+  "rust-analyzer.updates.prompt": false,
+  "rust-analyzer.procMacro.enable": true,
+  "rust-analyzer.checkOnSave": true,
+  "rust-analyzer.check.command": "clippy",
+  "rust-analyzer.cargo.allTargets": true,
+  "rust-analyzer.inlayHints.typeHints.enable": true,
+  "rust-analyzer.inlayHints.parameterHints.enable": true,
+  "rust-analyzer.inlayHints.chainingHints.enable": false,
+  "rust-analyzer.inlayHints.closingBraceHints.enable": false,
+  "rust-analyzer.inlayHints.bindingModeHints.enable": false,
+  "rust-analyzer.inlayHints.lifetimeElisionHints.enable": "never",
+  "rust-analyzer.inlayHints.maxLength": 25,
+  "rust-analyzer.completion.postfix.enable": true,
+  "rust-analyzer.completion.autoimport.enable": true,
+  "rust-analyzer.completion.callable.snippets": "fill_arguments",
+  "rust-analyzer.completion.addSemicolonToUnit": true,
+  "rust-analyzer.imports.granularity.group": "crate",
+  "rust-analyzer.imports.merge.glob": true,
+
+  // C / C++
+  "clangd.path": "/usr/bin/clangd",
+  "clangd.arguments": [
+    "--background-index",
+    "--clang-tidy",
+    "--header-insertion=never",
+    "--completion-style=detailed",
+    "--function-arg-placeholders",
+    "--all-scopes-completion",
+    "--pch-storage=memory",
+    "-j=6"
+  ],
+
+  // Python — pyright 做诊断，ruff 做格式化
+  "python.analysis.typeCheckingMode": "basic",   // off 会让大多数类型错误漏报
+  "python.analysis.indexing": false,
+  "python.analysis.logLevel": "Warning",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.autoSearchPaths": true,
+  "python.formatting.provider": "ruff",
+  "python.formatting.ruffPath": "/usr/bin/ruff",
+  "python.formatting.ruffArgs": ["--line-length", "100"],
+  "python.linting.ruffEnabled": true,
+  "pyright.organizeimports.provider": "ruff",
+  "pyright.completion.importSupport": true,
+  "pyright.completion.snippetSupport": true,
+  "pyright.inlayHints.parameterTypes": true,     // 参数名提示：f(count=3) 更直观
+  "pyright.inlayHints.variableTypes": false,
+  "pyright.inlayHints.functionReturnTypes": false,
+
+  // Lua
+  "Lua.completion.enable": true,
+  "Lua.completion.autoRequire": true,
+  "Lua.completion.showParams": true,
+  "Lua.diagnostics.enable": true,
+  "Lua.format.enable": true,
+  "Lua.hint.enable": true,
+  "Lua.hover.enable": true,
+  "Lua.signatureHelp.enable": true,
+  "Lua.semantic.enable": true,
+  "Lua.workspace.checkThirdParty": false,
+
+  // Shell
+  "bashIde.shellcheckPath": "/usr/bin/shellcheck",
+  "bashIde.shfmt.path": "/usr/bin/shfmt",
+  "bashIde.logLevel": "warning",
+
+  // YAML：打开基于 schema 的补全（docker-compose / GitHub Actions 等自动补全字段）
+  "yaml.completion": true,
+  "yaml.validate": true,
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*",
+    "https://json.schemastore.org/docker-compose.json": "docker-compose*.{yml,yaml}",
+    "https://json.schemastore.org/ansible-playbook.json": "*playbook*.{yml,yaml}"
+  },
+
+  // ==========================================================================
+  // JS / TS / Vue / Svelte / C# 补全质量
+  // ==========================================================================
+  // 注意：coc.nvim 本体不带 JS/TS 语言服务器（VSCode 的 tsserver 是内建的）。
+  // 下面这些键只有在安装了 coc-tsserver / coc-volar / coc-svelte 时才会生效；
+  // 未安装时 coc 会静默忽略，不会报错。需要时 :CocInstall coc-tsserver。
+  "javascript.suggest.autoImports": true,
+  "javascript.suggest.completeFunctionCalls": true,
+  "javascript.suggest.names": true,
+  "javascript.suggest.paths": true,
+  "javascript.format.enable": true,
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.suggest.autoImports": true,
+  "typescript.suggest.completeFunctionCalls": true,
+  "typescript.suggest.names": true,
+  "typescript.suggest.paths": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.format.enable": true,
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "volar.format.initialIndent": true,
+  "volar.takeOverMode.enabled": true,
+  "svelte.enable-ts-plugin": true,
+  "omnisharp.useModernNet": true,
+
+  // ==========================================================================
+  // coc 无官方扩展的语言：手动注册系统 LSP
+  // ==========================================================================
+  "languageserver": {
+    "gopls": {
+      "enable": true,
+      "command": "/usr/bin/gopls",
+      "args": ["serve"],
+      "filetypes": ["go"],
+      "rootPatterns": ["go.mod", ".git/"],
+      "requireRootPattern": false,
+      "settings": {
+        "ui.completion.usePlaceholders": true,
+        "ui.documentation.hoverKind": "FullDocumentation",
+        "ui.semanticTokens": true,
+        "ui.diagnostic.staticcheck": true,
+        "ui.diagnostic.analyses": {
+          "unreachable": true,
+          "unusedparams": true,
+          "unusedwrite": true
+        }
+      },
+      "initializationOptions": {
+        "usePlaceholders": true,
+        "completeUnimported": true
+      }
+    },
+    "vim-language-server": {
+      "enable": true,
+      "command": "/usr/bin/vim-language-server",
+      "args": ["--stdio"],
+      "filetypes": ["vim"],
+      "rootPatterns": [".git/"],
+      "requireRootPattern": false,
+      "initializationOptions": {
+        "isNeovim": false,
+        "iskeyword": "@,48-57,_,192-255",
+        "diagnostic.enable": true,
+        "diagnostic.useTag": false,
+        "indexes": {
+          "runtimepath": true,
+          "gap": 100,
+          "count": 3,
+          "projectRootPatterns": ["git", "github", "root_pattern"],
+          "rufuspath": null,
+          "vimroot": "/home/croe/.config",
+          "gvim": true
+        },
+        "suggest.fromVimruntime": true,
+        "suggest.fromRuntimepath": true,
+        "suggest.traces": ["DEFAULT", "DEFAULT_WORD", "DEFAULT_MEMBER", "DEFAULT_SYNTAX",
+                           "DEFAULT_OPTION", "DEFAULT_AUTOCMD", "DEFAULT_ENV"]
+      }
+    }
+  }
+}

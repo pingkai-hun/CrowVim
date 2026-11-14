@@ -1,0 +1,10 @@
+# 运行时文件
+.vim/plugged/
+.vim/undo/
+.vim/backup/
+.vim/session/
+.vim/tmpchk/
+.vim/.netrwhist
+.vim/ollama-venv/
+*.swp
+*.swo

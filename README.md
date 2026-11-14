@@ -1,86 +1,118 @@
-# Easy-Vim
+# Crow-Vim
 
-> 深色冷静系的 Vim 配置
+> 一套面向日常开发的 Vim 配置：现代外观、智能补全、调试与 Git 工作流开箱即用。
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Maintenance](https://img.shields.io/badge/Maintenance-⚠️%20Academic-yellow.svg)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+![Vim](https://img.shields.io/badge/Vim-9.0%2B-019733)
+
+Crow-Vim 是从 **Easy-Vim** 演进而来的个人 Vim 配置，使用 [vim-plug](https://github.com/junegunn/vim-plug) 管理插件，配色以 Catppuccin Mocha 为主，兼顾长时间编码的舒适度与中文显示。
 
 ## ✨ 特性
 
-- 🎨 **TokyoNight 主题** - 深色冷静，护眼高级
-- 🔌 **COC 智能补全** - 支持 Python/Go/Rust/JS/TS
-- 🐛 **Vimspector 调试** - 断点、单步、变量查看
-- 📁 **NERDTree 文件树** - 快速导航项目
-- 🔍 **FZF 模糊搜索** - 秒级定位文件
-- 🌈 **括号高亮** - rainbow 渐进色，美观清晰
-- 🖥️ **半透明支持** - 终端透明背景优化
+- 🎨 **Catppuccin Mocha** 主配色，附带 Gruvbox Material、TokyoNight 备用主题，支持一键切换
+- 🧠 **coc.nvim 智能补全**：LSP、代码诊断、重命名、代码操作
+- 🐛 **Vimspector 图形化调试**：断点、单步、变量查看
+- 📁 **NERDTree + Vista**：文件树与代码大纲（基于 LSP，比 ctags 更准确）
+- 🔍 **fzf / ripgrep**：秒级文件定位与全文搜索
+- 🖥️ **浮动终端**：Neovim 用 floaterm，Vim 用内置终端浮窗
+- 🌈 **rainbow 括号高亮 + airline 状态栏 + startify 启动页**
+- 🤖 **本地 AI 补全**：基于 Ollama（`vim-ollama`，可选）
+- 🇨🇳 针对中文优化的补全弹窗宽度、命令行补全与状态栏分段
 
-## 🚀 快速安装
+## 📦 依赖
 
-### 一键安装（推荐）
+| 依赖 | 说明 |
+| --- | --- |
+| `vim` 9.0+ | 需要 `+terminal`、`+python3`（可选） |
+| `git` | 插件安装 |
+| `nodejs` / `npm` | coc.nvim 运行环境 |
+| `ripgrep` | `<leader>/` 全文搜索 |
+| `ctags` | Tagbar 备用大纲 |
+| `python3` | Vimspector / Ollama 补全 |
+| `fzf` | 由 vim-plug 自动安装 |
+
+Arch / CachyOS 一次装齐：
 
 ```bash
-git clone https://github.com/pingkai-hun/Easy-Vim.git ~/Easy-Vim
-cp ~/Easy-Vim/.vimrc ~/.vimrc
+sudo pacman -S --needed git nodejs npm ripgrep ctags python python-pynvim
+```
+
+## 🚀 安装
+
+### 方式一：作为 `~/.vim` 使用（推荐）
+
+```bash
+git clone https://github.com/pingkai-hun/Crow-Vim.git ~/.vim
+ln -sf ~/.vim/.vimrc ~/.vimrc
 vim +PlugInstall +qall
+```
 
-手动安装
+### 方式二：直接复制
 
-    备份原有配置：
-    bash
+```bash
+git clone https://github.com/pingkai-hun/Crow-Vim.git ~/Crow-Vim
+cp ~/Crow-Vim/.vimrc ~/.vimrc
+cp -r ~/Crow-Vim/.vim/{config,autoload,plugin,after,coc-settings.json} ~/.vim/
+vim +PlugInstall +qall
+```
 
-    mv ~/.vimrc ~/.vimrc.bak
-    mv ~/.vim ~/.vim.bak
+> 安装前建议先备份原有配置：`mv ~/.vimrc ~/.vimrc.bak`、`mv ~/.vim ~/.vim.bak`。
 
-    克隆本仓库：
-    bash
+首次启动后执行 `:PlugInstall` 安装插件；coc 扩展可用 `:CocInstall coc-json coc-pyright coc-go` 等按需安装。
 
-    git clone https://github.com/pingkai-hun/Easy-Vim.git ~/.vim
-    ln -sf ~/.vim/.vimrc ~/.vimrc
+## 📂 目录结构
 
-    安装插件：
-    bash
+```
+Crow-Vim/
+├── .vimrc                     # 主配置（基础设置、插件、键位、主题）
+└── .vim/
+    ├── coc-settings.json      # coc.nvim 语言服务器与扩展配置
+    ├── config/
+    │   ├── crow.vim           # 自定义函数（项目搜索、终端、对话窗、Doctor）
+    │   └── ollama.vim         # 本地 AI 补全（可选）
+    ├── autoload/crow/         # 配色、模型、工具函数
+    ├── plugin/crow_doctor.vim # :Doctor 体检命令
+    └── after/ftplugin/        # Vim / Rust 文件类型微调
+```
 
-    vim +PlugInstall +qall
+## ⌨️ 常用键位
 
-⌨️ 常用快捷键
-快捷键	功能
-<leader>n	打开/关闭文件树
-<leader>p	模糊搜索文件
-<leader>c	注释当前行/选中区域
-gd	跳转到定义
-K	查看悬浮文档
-<F5>	开始调试
-<F7>	打开浮动终端
-<F8>	打开 Tagbar
-<leader>w	保存文件
-<leader>q	退出
+Leader 键为 **空格**。
 
-    <leader> 键为空格键
+| 键位 | 功能 |
+| --- | --- |
+| `<leader>w` / `<leader>wq` / `<leader>q` | 保存 / 保存退出 / 退出 |
+| `<leader>sr` / `<leader>sc` | 重载配置 / 编辑配置 |
+| `<leader>n` / `<leader>nf` | 文件树开关 / 定位当前文件 |
+| `<leader>p` / `<leader>b` | 查找文件 / 切换缓冲区 |
+| `<leader>/` / `<leader>R` | 全文搜索 / 在项目根目录搜索 |
+| `<leader>/` `*` | 搜索光标下单词（`<leader>*`） |
+| `<F8>` / `<leader>wa` | 代码大纲与当前符号 |
+| `<leader>rn` / `<leader>ac` | 重命名 / 代码操作 |
+| `<F5>` `F9` `F10` `F11` `F12` | 调试：继续 / 断点 / 单步跳过 / 步入 / 步出 |
+| `<leader>dq` / `<leader>dr` | 停止 / 重启调试 |
+| `<F7>` / `<leader>tt` | 终端浮窗 / 在项目根目录开终端 |
+| `<F6>` | 用 Python 运行当前文件 |
+| `<leader>os` / `<leader>od` / `<leader>oN` | 保存 / 停止 / 恢复会话 |
+| `<leader>D` | 运行 `:Doctor` 环境体检 |
+| `<leader>h` | 取消搜索高亮 |
 
-📦 主要插件
-插件	用途
-coc.nvim	智能补全 + LSP
-tokyonight-vim	TokyoNight 主题
-vim-airline	美化状态栏
-vimspector	图形化调试
-fzf.vim	模糊搜索
-NERDTree	文件树
-vim-commentary	快速注释
-rainbow	括号高亮
-vim-floaterm	浮动终端
-📫 联系方式与维护说明
+## 🎨 主题切换
 
-    ⚠️ 学业比较紧，开源随缘
+默认 Catppuccin Mocha。配置中已内置切换命令（见 `.vimrc` 的「主题切换」小节），也可手动：
 
-本人为在校学生，学业压力较大，无法保证及时响应 Issue 和 Pull Request。
+```vim
+:colorscheme catppuccin_mocha
+:Theme tokyonight
+```
 
-    📧 主邮箱：opmbwdpqr@mozmail.com
+## 📄 许可证
 
-    📧 备用邮箱：zhangkai26_9_1@foxmail.com
+本项目基于 [MIT License](LICENSE) 开源。
 
+Copyright © 2026 White-Crow-Bug
 
-欢迎 PR，但请理解 review 可能需要时间。感谢理解 🙏
-📄 许可证
-MIT © pingkai-hun
-如果这个配置对你有帮助，欢迎点个 Star ⭐
+## 🙏 致谢
+
+- 前身项目 Easy-Vim
+- [vim-plug](https://github.com/junegunn/vim-plug)、[coc.nvim](https://github.com/neoclide/coc.nvim)、[Catppuccin](https://github.com/catppuccin/vim) 及所有插件作者
